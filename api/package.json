@@ -1,0 +1,24 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "api policlinique",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "express",
+    "ejs"
+  ],
+  "author": "Med-Najjar",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
