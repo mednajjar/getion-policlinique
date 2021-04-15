@@ -1,0 +1,23 @@
+POST http://localhost:5000/register
+Content-Type: application/json
+
+{
+    "username": "mohamedali",
+    "email": "ali@email.com",
+    "password": "azerty"
+}
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+
+    "email": "medali@email.com",
+    "password": "azerty"
+}
+###
+GET http://localhost:5000/users
+auth_token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNzg3YTdjMjY0OGNhMjMxYzZmZjRiMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTYxODUxMTExMiwiZXhwIjoxNjE4NTExNzEyfQ.1xjvwFriN7vqYwzQ0GhT92jCkqj3WKd2c3jGEL2CFEA
+
+###
+GET http://localhost:5000/logout

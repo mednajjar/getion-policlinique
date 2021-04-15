@@ -1,7 +1,17 @@
-<div class="container">
-    <h1 class="text-center mt-5">Policlinique</h1>
-</div>
+<h1 class="text-center mt-5">Login</h1>
 
-<div class="container mt-5">
-   <h2>test</h2>
+<div class="container mt-5">    
+   <div class="card cart mx-auto" >
+    <form class="register mx-auto pt-4 pb-4" action="/dashboard" method="POST">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Email...">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" placeholder="Password...">
+        </div>
+        <button type="submit" class="btn btn-primary col-12">Login</button>
+      </form>
+   </div> 
 </div>
