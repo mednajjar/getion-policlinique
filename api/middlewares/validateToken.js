@@ -16,13 +16,12 @@ exports.auth = async (req, res, next) => {
     try{
         const verify = await jwt.verify(token, process.env.TOKEN_SECRET);
         const userLog = verify; 
-        console.log(userLog)
             if(verify && userLog.role == res.type){
-                    const user = await User.findById(userLog.id).select('-password');
-                    res.locals.user = user;
-                    console.log(res.locals.user._id);
-                    console.log(res.locals.user.role);
-                    next();
+                const user = await User.findById(userLog.id).select('-password');
+                req.session.role = user.role;
+                res.render('dashboard', {role: user.role})                  
+                next();
+              
             }else{
                 return res.status(400).json(`1 private root need ${res.type} to login`);
             }

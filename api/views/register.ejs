@@ -1,7 +1,12 @@
-<h1 class="text-center mt-5">Login</h1>
+<% if(role === 'admin'){ %>
+<h1 class="text-center mt-5">Add reception</h1>
 <div class="container mt-5">    
    <div class="card cart mx-auto" >
-    <form class="register mx-auto pt-4 pb-4" action="/dashboard" method="POST">
+    <form class="register mx-auto pt-4 pb-4" action="" method="POST">
+        <div class="mb-3">
+          <label for="email" class="form-label">User name:</label>
+          <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="User name...">
+        </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email address</label>
           <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Email...">
@@ -10,7 +15,8 @@
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" name="password" placeholder="Password...">
         </div>
-        <button type="submit" class="btn btn-primary col-12">Login</button>
+        <button type="submit" class="btn btn-primary col-12">Add</button>
       </form>
    </div> 
 </div>
+<% } %>

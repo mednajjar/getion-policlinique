@@ -7,7 +7,7 @@ Content-Type: application/json
     "password": "azerty"
 }
 ###
-POST http://localhost:5000/login
+POST http://localhost:5000/
 Content-Type: application/json
 
 {
@@ -17,7 +17,9 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:5000/users
-auth_token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNzg3YTdjMjY0OGNhMjMxYzZmZjRiMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTYxODUxMTExMiwiZXhwIjoxNjE4NTExNzEyfQ.1xjvwFriN7vqYwzQ0GhT92jCkqj3WKd2c3jGEL2CFEA
+auth_token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNrdU54Nm5mY3RpaDdQM1lUSzFmUUZyUXluX3VVc0FPIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjE4NTI1NDY0LCJleHAiOjE2MTg1MjYwNjR9.yqMfIn_s1zNJDRZWy3cgXr_nfJt18fB3hTq1PtOhbXE; Max-Age=600; Path=/; Expires=Invalid Date; HttpOnly,connect.sid=s%3ASkuNx6nfctih7P3YTK1fQFrQyn_uUsAO.dLPWY6SQ7dYUOhnP7yh4nkEwWhxpGfVo3wh2dE%2BzZbk
 
 ###
 GET http://localhost:5000/logout
+###
+GET http://localhost:5000/dashboard

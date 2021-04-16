@@ -34,3 +34,7 @@ exports.getReception = async (req, res) =>{
         throw Error(error)
     }
 }
+
+exports.registerPage = (req, res)=>{
+    return res.render('register')
+}

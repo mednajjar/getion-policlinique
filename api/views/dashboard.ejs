@@ -1,7 +1,12 @@
-<div class="container">
-    <h1 class="text-center mt-5">Policlinique</h1>
-</div>
-
+<% if(role === 'admin'){ %>
 <div class="container mt-5">
-   <h2>test</h2>
+   <h2 class="text-center mt-5">Gestion d'utilisateur</h2>
+   <a class="nav-link active" aria-current="page" href="register">Add</a>
+
 </div>
+<% } %>
+<% if(role === 'reception'){ %>
+<div class="container mt-5">
+   <h2 class="text-center mt-5">Gestion salle d'attente</h2>
+</div>
+<% } %>
