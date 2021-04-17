@@ -8,17 +8,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav col-6">
-        <% if(role){ %>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="dashboard">Home</a>
-        </li>
-          <% if(role === 'admin'){ %>
+          <% if(role){ %>
+            <% if(role === 'admin'){ %>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/register">Add</a>
+              <a class="nav-link " aria-current="page" href="/users">Reception list</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">admin2</a>
+              <a class="nav-link " aria-current="page" href="/register">Add reception</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="/medcineList">Medcine list</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="/medcine">Add medcine</a>
+            </li>
+            <% } %>
             <% } %>
             <% if(role === 'reception'){ %>
               <li class="nav-item">
@@ -28,13 +32,13 @@
                 <a class="nav-link active" aria-current="page" href="#">reception2</a>
               </li>
             <% } %>
-          <% } %>
+        
       </ul>
       <ul class="navbar-nav col-6 justify-content-end ">
         <% if(role){ %>
           <li class="nav-item">
             
-              <a class="nav-link" href="/logout">Logout</a>
+              <a class="nav-link active" href="/logout">Logout</a>
             
           </li>
         <% } %>

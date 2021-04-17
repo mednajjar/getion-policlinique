@@ -1,0 +1,36 @@
+<% if(role){ %>
+    <% if(role === 'admin'){ %>
+  <h1 class="text-center mt-5">Add medcine</h1>
+  <div class="container mt-5">    
+     <div class="card cart mx-auto" >
+      <form class="register mx-auto pt-4 pb-4" action="/addmed" method="POST">
+          <div class="mb-3">
+            <label for="username" class="form-label">Matricule:</label>
+            <input type="text" class="form-control" name="matricule" aria-describedby="emailHelp" placeholder="Matricule...">
+          </div>
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom:</label>
+            <input type="text" class="form-control" name="nom" aria-describedby="emailHelp" placeholder="Nom...">
+          </div>
+          <div class="mb-3">
+            <label for="prenom" class="form-label">Prénom:</label>
+            <input type="text" class="form-control" name="prenom" aria-describedby="emailHelp" placeholder="prenom...">
+          </div>
+          <div class="mb-3">
+            <label for="specialite" class="form-label">Spécialité:</label>
+            <input type="text" class="form-control" name="specialite" aria-describedby="emailHelp" placeholder="Specialite...">
+          </div>
+          <div class="mb-3">
+            <label for="consmax" class="form-label">Consultation max:</label>
+            <input type="number" min="1" class="form-control" name="consmax" placeholder="Consultation max...">
+          </div>
+          <button type="submit" class="btn btn-primary col-12">Add</button>
+        </form>
+     </div> 
+  </div>
+  <% } %>
+  <% }else{ %>
+    <script>
+      location.replace("/")
+    </script>
+  <% } %>

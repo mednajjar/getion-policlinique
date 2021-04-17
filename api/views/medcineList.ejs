@@ -1,0 +1,46 @@
+<% if(role){ %>
+    <% if(medcines){ %>
+        
+        <div class="container mt-5 text-center">
+            <h3>Table de medcine</h3>
+        </div>
+        <div class="container mt-5">
+        <div class="container mt-5">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Matricule</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Spécialité</th>
+                <th scope="col">Cons-max</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% medcines.map(res=>{ %>
+              <tr>
+                <th scope="row"><%= res.matricule %></th>
+                <td><%= res.nom %></td>
+                <td><%= res.prenom %></td>
+                <td><%= res.specialite %></td>
+                <td><%= res.consmax %></td>
+                <td><form action="/medcineList/<%= res._id %>" method="POST"><button class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this record?')" type="submit">Delete</button></form></td>
+            </tr>
+            <% })}else{ %>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        
+            <p>no user found!</p>
+        <% } %>
+    <% }else{ %>
+        <script>
+            location.replace("/")
+        </script>
+      <% } %>
+    
+    
+    
+     

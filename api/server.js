@@ -35,11 +35,12 @@ app.use(
 app.use((req, res, next) => {
     res.locals.role = req.session.role; 
     console.log('from server',res.locals.role)
+
     next();
 });
 app.use('/', homePage);
 app.use('/', dashboard);
-// the last middleware should be 404 page
+// the last route middleware should be 404 page
 app.use((req, res)=>{
     res.status(404).render('404')
 })

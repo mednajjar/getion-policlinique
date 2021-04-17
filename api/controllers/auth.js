@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 
 exports.login = async (req, res)=>{
-   
+
     // check validaton
     const {error} = login(req.body);
     if(error) return res.status(400).json({err: error.details[0].message});
@@ -20,10 +20,11 @@ exports.login = async (req, res)=>{
         if(!match) return res.status(400).json({err: 'Invalid email or password'});
         req.session.id = Email._id;
         req.session.role = Email.role;
+        const userRl = req.session.role;
         console.log('from login',req.session.role)
         const token = jwt.sign({id: Email._id, role: Email.role}, process.env.TOKEN_SECRET, {expiresIn:process.env.EXPIRATION_IN});
         res.cookie('auth_token', token, {maxAge:process.env.EXPIRATION_IN, httpOnly: true})
-        return res.status(200).render('dashboard', {role: Email.role});
+        return res.status(200).render('dashboard', {role: userRl});
 
     } catch (err) {
         res.status(400).json({error: 'bad request'});

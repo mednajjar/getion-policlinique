@@ -16,19 +16,23 @@ exports.auth = async (req, res, next) => {
     try{
         const verify = await jwt.verify(token, process.env.TOKEN_SECRET);
         const userLog = verify; 
-            if(verify && userLog.role == res.type){
-                const user = await User.findById(userLog.id).select('-password');
-                req.session.role = user.role;
-                res.render('dashboard', {role: user.role})                  
+            if(userLog){
+                if(userLog.role == res.type){
+                    const user = await User.findById(userLog.id).select('-password');
+                    req.session.role = user.role;
+                    console.log('from valid token',req.session.role) 
+                    res.render('dashboard', {role: req.session.role})        
                 next();
+
+                }
               
             }else{
                 return res.status(400).json(`1 private root need ${res.type} to login`);
             }
       
     } catch(err) {
-        res.locals.user = null;
-        res.cookie('auth_token', '', { maxAge: 1 });
-        return res.status(400).json(`2 private root need ${res.type} to login`);
+        res.clearCookie('connect.sid');
+        res.cookie('auth_token', '', {maxAge: 0, httpOnly: true});
+        res.status(200).redirect('/')
     }
 };

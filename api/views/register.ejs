@@ -1,11 +1,12 @@
-<% if(role === 'admin'){ %>
+<% if(role){ %>
+  <% if(role === 'admin'){ %>
 <h1 class="text-center mt-5">Add reception</h1>
 <div class="container mt-5">    
    <div class="card cart mx-auto" >
-    <form class="register mx-auto pt-4 pb-4" action="" method="POST">
+    <form class="register mx-auto pt-4 pb-4" action="/register" method="POST">
         <div class="mb-3">
-          <label for="email" class="form-label">User name:</label>
-          <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="User name...">
+          <label for="username" class="form-label">User name:</label>
+          <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="User name...">
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email address</label>
@@ -19,4 +20,9 @@
       </form>
    </div> 
 </div>
+<% } %>
+<% }else{ %>
+  <script>
+    location.replace("/")
+  </script>
 <% } %>
