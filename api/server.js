@@ -9,6 +9,7 @@ const path = require('path')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const TWO_HOURS = 1000*60*60*2;
 
 mongoose.connect(process.env.CON_DB, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=>console.log('connection success'))
@@ -29,6 +30,11 @@ app.use(
     secret: process.env.SESS_SECRET,
     resave: false,
     saveUninitialized: false,
+
+    cookie: { 
+        maxAge: TWO_HOURS,
+        sameSite: true,  
+    },
 })
 );
 // myStore.sync();

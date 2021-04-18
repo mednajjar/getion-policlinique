@@ -1,0 +1,32 @@
+<% if(role){ %>
+    <% if(role === 'reception'){ %>
+  <h1 class="text-center mt-5">Add patient</h1>
+  <div class="container mt-5">    
+     <div class="card cart mx-auto" >
+      <form class="register mx-auto pt-4 pb-4" action="/patient" method="POST">
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom:</label>
+            <input type="text" class="form-control" name="nom" aria-describedby="emailHelp" placeholder="Nom...">
+          </div>
+          <div class="mb-3">
+            <label for="prenom" class="form-label">Prénom:</label>
+            <input type="text" class="form-control" name="prenom" aria-describedby="emailHelp" placeholder="Prénom...">
+          </div>
+          <div class="mb-3">
+            <label for="cin" class="form-label">Cin:</label>
+            <input type="text" class="form-control" name="cin" placeholder="Cin...">
+          </div>
+          <div class="mb-3">
+            <label for="dtns" class="form-label">Date de naissance:</label>
+            <input type="date" class="form-control" name="dtns">
+          </div>
+          <button type="submit" class="btn btn-primary col-12">Add</button>
+        </form>
+     </div> 
+  </div>
+  <% } %>
+  <% }else{ %>
+    <script>
+      location.replace("/")
+    </script>
+  <% } %>

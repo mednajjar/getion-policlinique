@@ -26,10 +26,10 @@
             <% } %>
             <% if(role === 'reception'){ %>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Reception1</a>
+                <a class="nav-link active" aria-current="page" href="/patient">Add ptient</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">reception2</a>
+                <a class="nav-link active" aria-current="page" href="/patientList">Patient list</a>
               </li>
             <% } %>
         
@@ -38,7 +38,7 @@
         <% if(role){ %>
           <li class="nav-item">
             
-              <a class="nav-link active" href="/logout">Logout</a>
+              <a class="btn btn-outline-dark" href="/logout">Logout</a>
             
           </li>
         <% } %>

@@ -1,0 +1,51 @@
+<% if(role){ %>
+    <% if(patients){ %>
+        
+        <div class="container mt-5 text-center">
+            <h3>Liste de patient</h3>
+        </div>
+        <div class="container mt-5">
+          <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="btn btn-outline-success">All registred</a>
+              <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </div>
+          </nav>
+        <div class="container mt-5">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Cin</th>
+                <th scope="col">Date-Né</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% patients.map(res=>{ %>
+              <tr>
+                <th scope="row"><%= res.nom %></th>
+                <td><%= res.prenom %></td>
+                <td><%= res.cin %></td>
+                <td><%= res.dateDeNaissance %></td>
+            </tr>
+            <% })}else{ %>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        
+            <p>no user found!</p>
+        <% } %>
+    <% }else{ %>
+        <script>
+            location.replace("/")
+        </script>
+      <% } %>
+    
+    
+    
+     

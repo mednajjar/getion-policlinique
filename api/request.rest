@@ -23,3 +23,10 @@ auth_token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNrdU54Nm5mY3RpaDdQM1lU
 GET http://localhost:5000/logout
 ###
 GET http://localhost:5000/dashboard
+###
+GET http://localhost:5000/search
+Content-Type: application/json
+
+{
+    "cin": "ha1212123"
+}
