@@ -7,6 +7,7 @@ const medcineSchema = new Schema({
     nom:{type: String, require: true},
     prenom:{type: String, require: true},
     specialite:{type: String, require: true},
+    patientmax:{type: Number, default:0},
     consmax:{type: Number, require: true},   
 })
 medcineSchema.plugin(uniqueValidator);

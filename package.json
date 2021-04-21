@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "gestion salle d'attente pour un policlinique",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/mednajjar/getion-policlinique/issues"
   },
-  "homepage": "https://github.com/mednajjar/getion-policlinique#readme"
+  "homepage": "https://github.com/mednajjar/getion-policlinique#readme",
+  "dependencies": {
+    "mongoose-date-format": "^1.2.0"
+  }
 }

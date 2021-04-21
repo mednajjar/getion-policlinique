@@ -20,6 +20,18 @@
             <label for="dtns" class="form-label">Date de naissance:</label>
             <input type="date" class="form-control" name="dtns">
           </div>
+          <div class="mb-3">
+          <label for="dtns" class="form-label">Medcin:</label>
+          <select name="name" class="form-select" aria-label="Default select example">
+            <option selected>choisi un medcin</option>
+            <% if(medcin){ %>
+              <% medcin.map(res=>{ %>
+            <option value="<%= res.nom %>"><%= res.nom %></option>
+            <% }) %>
+            <% } %>
+            
+          </select>
+        </div>
           <button type="submit" class="btn btn-primary col-12">Add</button>
         </form>
      </div> 

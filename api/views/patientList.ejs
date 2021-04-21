@@ -1,5 +1,6 @@
 <% if(role){ %>
-    <% if(patients){ %>
+  <% if(role === 'reception'){ %>
+   
         
         <div class="container mt-5 text-center">
             <h3>Liste de patient</h3>
@@ -7,9 +8,11 @@
         <div class="container mt-5">
           <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
-              <a class="btn btn-outline-success">All registred</a>
-              <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <form action="/patientList" method="GET">
+              <button class="btn btn-outline-success" type="submit">All patients</button>
+              </form>
+              <form class="d-flex" action="/patientList" method="POST">
+                <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
               </form>
             </div>
@@ -24,6 +27,7 @@
                 <th scope="col">Date-Né</th>
               </tr>
             </thead>
+            <% if(patients !== null){ %>
             <tbody>
                 <% patients.map(res=>{ %>
               <tr>
@@ -32,14 +36,16 @@
                 <td><%= res.cin %></td>
                 <td><%= res.dateDeNaissance %></td>
             </tr>
-            <% })}else{ %>
             </tbody>
+            <% })}else{ %>
+              <p>no user found!</p>
+            <% }} %>
           </table>
         </div>
         </div>
         
-            <p>no user found!</p>
-        <% } %>
+            
+        
     <% }else{ %>
         <script>
             location.replace("/")

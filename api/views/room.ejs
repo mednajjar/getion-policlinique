@@ -1,0 +1,49 @@
+<% if(role){ %>
+    <% if(role === 'reception'){ %>
+     
+          
+          <div class="container mt-5 text-center">
+              <h3>Rooms</h3>
+          </div>
+          <div class="container mt-5">
+            <nav class="navbar navbar-light bg-light">
+              <div class="container-fluid">
+                <form action="/room" method="POST">
+                <button class="btn btn-outline-success" type="submit">Create room</button>
+                </form>
+                <form action="/room" method="GET">
+                    <button class="btn btn-outline-success" type="submit">Get dates</button>
+                    </form>
+              </div>
+            </nav>
+          <div class="container mt-5 text-center">
+          <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <% if(room){ %>
+              <tbody>
+                  <% room.map(res=>{ %>
+                <tr>
+                  <th class="text-secondary"><%= res.aujourdhui %></th>
+              </tr>
+              </tbody>
+              <% })} %>
+               <% } %>
+            </table>
+          </div>
+          </div>
+          
+              
+          
+      <% }else{ %>
+          <script>
+              location.replace("/")
+          </script>
+        <% } %>
+      
+      
+      
+       

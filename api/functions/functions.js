@@ -1,42 +1,37 @@
-exports.findPatientByDt = async (res, model, value) =>{
+// exports.findPatientByDt = async (res, model, value) =>{
    
-    try {
-        const variable = await model.find({dtns: value});
-        if(variable){
-            return res.status(201).json({variable}) 
-        }else{
-            return res.status(400).json('no data found')
-        }
+//     try {
+//         await model.find({dtns: value},
+//             function(err, result) {
+//               if (err) {
+//                 res.send(err);
+//               } else {
+//                 res.send(result);
+//               }
+//             });
         
+        
+//     } catch (error) {
+//         throw Error(error)
+//     }
+// }
+
+exports.findPatient = async (res, model, value) =>{
+
+    try {
+        const resultat = await model.find({$or: [{nom: { $regex: '.*' + value + '.*' }},{prenom: { $regex: '.*' + value + '.*' }},{cin: { $regex: '.*' + value + '.*' }}] });
+        if(resultat) return res.render('patientList', {patients: resultat}) 
     } catch (error) {
         throw Error(error)
     }
 }
 
-exports.findPatientByName = async (res, model, value) =>{
-   
+exports.findAll = async (req, res, model)=>{
+    const receptionRole = req.session.role;
     try {
-        const variable = await model.find({nom: value});
-        if(variable){
-            return res.status(201).json({variable}) 
-        }else{
-            return res.status(400).json('no data found')
-        }
-        
-    } catch (error) {
-        throw Error(error)
-    }
-}
-exports.findPatientByCin = async (res, model, value) =>{
-   
-    try {
-        const variable = await model.find({cin: value});
-        if(variable){
-            return res.status(201).json({variable}) 
-        }else{
-            return res.status(400).json('no data found')
-        }
-        
+    
+        const patients = await model.find();
+        if(patients) res.render('patientList', {role: receptionRole, patients: patients}) 
     } catch (error) {
         throw Error(error)
     }

@@ -22,7 +22,7 @@ exports.login = data=>{
 exports.registerMedcine = data=>{
 
     const schema = Joi.object({
-    matricule: Joi.string().min(4).unique().required(),
+    matricule: Joi.string().min(4).required(),
     nom: Joi.string().min(3).required(),
     prenom:Joi.string().min(3).required(),
     specialite:Joi.string().min(3).required(),
@@ -38,6 +38,7 @@ exports.registerPatient = data=>{
     prenom: Joi.string().min(3).required(),
     cin:Joi.string().min(3).required(),
     dtns:Joi.date().required(),
+    name:Joi.string().required(),
 })
     return schema.validate(data)
 }

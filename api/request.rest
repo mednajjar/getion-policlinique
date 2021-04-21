@@ -28,5 +28,5 @@ GET http://localhost:5000/search
 Content-Type: application/json
 
 {
-    "cin": "ha1212123"
+    "keyword": "tes"
 }
