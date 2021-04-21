@@ -1,4 +1,7 @@
 // exports.findPatientByDt = async (res, model, value) =>{
+
+const D_Consultation = require("../models/D_Consultation");
+
    
 //     try {
 //         await model.find({dtns: value},
@@ -36,3 +39,16 @@ exports.findAll = async (req, res, model)=>{
         throw Error(error)
     }
 }
+
+exports.updatedEtat = async (req, res, model, value)=>{
+    const receptionRole = req.session.role;
+    const updateEtat = await model.findByIdAndUpdate({_id: req.params.id},{etat: value})
+    if(updateEtat){
+        const room = await model.find()
+        .populate('id_salleAtt')
+        .populate('id_medcine')
+        .populate('id_patient')
+        return res.render('salleAtt', {role: receptionRole, room: room})
+    }
+}
+

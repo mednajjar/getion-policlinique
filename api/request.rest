@@ -30,3 +30,6 @@ Content-Type: application/json
 {
     "keyword": "tes"
 }
+
+###
+GET http://localhost:5000/room

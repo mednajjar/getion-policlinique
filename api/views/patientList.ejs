@@ -6,6 +6,7 @@
             <h3>Liste de patient</h3>
         </div>
         <div class="container mt-5">
+          <div class="card shadow p-3 mb-5 bg-body rounded">
           <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
               <form action="/patientList" method="GET">
@@ -17,7 +18,7 @@
               </form>
             </div>
           </nav>
-        <div class="container mt-5">
+        <div class="container mt-5 overflow-auto">
         <table class="table">
             <thead>
               <tr>
@@ -42,6 +43,7 @@
             <% }} %>
           </table>
         </div>
+      </div>
         </div>
         
             

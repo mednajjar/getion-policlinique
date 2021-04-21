@@ -1,6 +1,6 @@
 const Patient = require('../models/Patient');
 const {registerPatient} = require('../validation/validForm');
-const {findPatient, findAll} = require('../functions/functions');
+const {findPatient, findAll, updatedEtat} = require('../functions/functions');
 const Fawn = require('fawn');
 const Medcine = require('../models/Medcine');
 const Room = require('../models/Salle_attente');
@@ -15,7 +15,7 @@ const Consultation = require('../models/D_Consultation');
  exports.patientPage = async (req, res)=>{
     const receptionRole = req.session.role;
     const medcin = await Medcine.find();
-    res.render('patient', {role: receptionRole, medcin: medcin}) 
+    res.render('patient', {role: receptionRole, medcin: medcin, msg: ''}) 
 }
 
  exports.patientListPage = async (req, res)=>{
@@ -32,26 +32,31 @@ const Consultation = require('../models/D_Consultation');
  */
 
  exports.createPatient = async (req, res)=>{
+    const medcine = await Medcine.find()
     const {error} = registerPatient(req.body);
-    if(error) return res.status(400).json({err: error.details[0].message});
-
+    if(error){
+        return res.render('patient', {role: req.session.role, medcin: medcine, msg: error.details[0].message});
+    } 
     // const today = new Date().toISOString().slice(0, 10)
     // console.log(today)
     const findDate = await Room.findOne({aujourdhui: Date.now })
-    console.log(findDate)
-    if(!findDate) return res.status(400).json('You sould create room first!')
-    // si nouvelle date update le nombre consultation
-    /**
-     * 
-     */
+    if(!findDate){
+        req.flash('error', 'Veuillez créer une salle d\'attente pour aujourd\'hui avant d\'ajouter un patient!')
+        return res.render('patient', {role: req.session.role, medcin: medcine, msg: req.flash('error')});
+    } 
     try {
         const cinExist = await Patient.findOne({cin: req.body.cin});
-        if(cinExist) return res.status(400).json('Cin already exist!');
+        if(cinExist){
+            req.flash('error', 'La CIN existe déjà!')
+            return res.render('patient', {role: req.session.role, medcin: medcine, msg: req.flash('error')});
+        } 
 
-        const medcine = await Medcine.find()
+        
         const selectedMedcine = await Medcine.findOne({nom: req.body.name})
-        console.log(selectedMedcine)
-        if(selectedMedcine.patientmax >= selectedMedcine.consmax) return res.statue(400).json('le nombre de consultation attiendre le maximum')
+        if(selectedMedcine.patientmax > selectedMedcine.consmax){
+            req.flash('error', `Le nombre de consultation pour monsieur ${req.body.name} attiendre le maximum!, veuillez le contacter.`)
+            return res.render('patient', {role: req.session.role, medcin: medcine, msg: req.flash('error')});
+        } 
         const patient = new Patient({
             ...req.body,
         })
@@ -67,7 +72,10 @@ const Consultation = require('../models/D_Consultation');
         .update('Medcine',{_id: selectedMedcine._id},{$inc:{patientmax: 1}})
         .update('D_Consultation',{_id: dConsultation._id},{$inc:{num_order: selectedMedcine.patientmax + 1}})
         .run({ useMongoose: true })
-        if (taches) return res.status(200).render('patient', {role: req.session.role, medcin: medcine});
+        if (taches){
+            req.flash('error', 'Patient créer et ajouter au salle d\'attente')
+            return res.render('patient', {role: req.session.role, medcin: medcine, msg: req.flash('error')});
+        } 
         // const newPatient = await patient.save();
         // if(newPatient) return res.status(200).render('patient', {role: req.session.role, medcin: medcine});
         
@@ -89,7 +97,14 @@ exports.findFunction = async (req, res)=>{
 
 exports.salleAttPage = async (req, res)=>{
     const receptionRole = req.session.role;
-    res.render('salleAtt', {role: receptionRole}) 
+    const room = await Consultation.find()
+    .populate('id_salleAtt')
+    .populate('id_medcine')
+    .populate('id_patient')
+  
+    if(room) {
+        return res.render('salleAtt', {role: receptionRole, room: room, examiner: room.etat})
+     }
 }
 
 
@@ -97,10 +112,13 @@ exports.roomPage = async (req, res)=>{
     const receptionRole = req.session.role;
     try {
         const room = await Room.find();
-        if(room) res.render('room', {role: receptionRole, room: room}) 
+        if(room) res.render('room', {role: receptionRole, room: room, msg: ''}) 
     } catch (error) {
         throw Error(error)
     }
+    
+    
+    
 }
 
 
@@ -109,15 +127,42 @@ exports.newRoom = async (req, res)=>{
     
     try {
         const fetchRoom = await Room.find();
-        const ExistRoom = await Room.findOne({aujourdhui: fetchRoom.aujourdhui});
-        if(ExistRoom) return res.status(400).json('room already created');
+        const ExistRoom = await Room.findOne({ajourdhui: fetchRoom.roomDate});
+        if(ExistRoom){
+            req.flash('error', 'Salle d\'attente existe déjà pour aujourd\'hui!');
+            return res.render('room', {role: receptionRole, room: fetchRoom, msg: req.flash('error')})
+        }
         
         const room = new Room();
         const newRoom = await room.save();
-        if(newRoom) return res.render('room', {role: receptionRole, room: fetchRoom})
+        if(newRoom){
+            await Medcine.updateMany({patientmax: 0});
+            req.flash('error', 'Vous avez créer nouveau salle d\'attente')
+            return res.render('room', {role: receptionRole, room: fetchRoom, msg: req.flash('error')})
+        }
         
     } catch (error) {
         throw Error(error)
     }
 }
 
+exports.enCours = async (req, res) =>{
+    await updatedEtat(req, res, Consultation, 'en-cours')
+}
+
+exports.examiner = async (req, res) =>{
+    await updatedEtat(req, res, Consultation, 'examiner')
+}
+
+exports.findRoom = async (req, res)=>{
+    try {
+        const receptionRole = req.session.role;
+        const resultat = await Consultation.find({$or: [{etat: { $regex: '.*' + req.body.keyword + '.*' }}, {num_order:  req.body.keyword }]})
+        .populate('id_salleAtt')
+        .populate('id_medcine')
+        .populate('id_patient')
+        if(resultat) return res.render('salleAtt', {role: receptionRole, room: resultat, examiner: resultat.etat}) 
+    } catch (error) {
+        throw Error(error)
+    }
+}

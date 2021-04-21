@@ -11,12 +11,13 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const TWO_HOURS = 1000*60*60*2;
 const Fawn = require("fawn");
+const flash = require('connect-flash');
 
 mongoose.connect(process.env.CON_DB, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=>console.log('connection success'))
 .catch(()=>console.log('connection failed!'))
 
-
+app.use(flash());
 Fawn.init(mongoose);
 app.use(cookieParser());
 app.use(express.json());

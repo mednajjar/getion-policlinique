@@ -1,16 +1,19 @@
 <% if(!role){ %>
 <div >
 <h1 class="text-center mt-5">Login</h1>
-<div class="container mt-5" >    
-   <div class="card cart mx-auto" >
+<div class="container mt-5" > 
+  <% if(msg !== ''){ %>
+    <p class="text-danger text-center"><%= msg %></p> 
+  <% } %>  
+   <div class="card cart mx-auto shadow-lg p-3 mb-5 bg-body rounded" >
     <form class="register mx-auto pt-4 pb-4" action="/dashboard" method="POST">
         <div class="mb-3">
           <label for="email" class="form-label">Email address</label>
-          <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Email...">
+          <input type="email" class="form-control" value='<%= email %>' name="email" aria-describedby="emailHelp" placeholder="Email...">
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" name="password" placeholder="Password...">
+          <input type="password" class="form-control" value='<%= pass %>' name="password" placeholder="Password...">
         </div>
         <button type="submit" class="btn btn-primary col-12">Login</button>
       </form>

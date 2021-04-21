@@ -1,22 +1,20 @@
 <% if(role){ %>
     <% if(role === 'reception'){ %>
           <div class="container mt-5 text-center">
-              <h3>Liste de patient</h3>
+              <h3>Salle d'attente</h3>
           </div>
           <div class="container mt-5">
+            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
             <nav class="navbar navbar-light bg-light">
-              <div class="container-fluid">
-                <form action="/patientList" method="GET">
-                <button class="btn btn-outline-success" type="submit">All patients</button>
-                </form>
-                <form class="d-flex" action="/patientList" method="POST">
-                  <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
+              <div class="container-fluid col-8">
+                <form class="d-flex col-12" action="/salleAtt" method="POST">
+                  <input class="form-control me-2" name="keyword" type="search" placeholder="Search by etat..." aria-label="Search">
                   <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
               </div>
             </nav>
-          <div class="container mt-5">
-          <table class="table">
+          <div class="container mt-5 overflow-auto shadow p-3 mb-5 bg-body rounded">
+          <table class="table ">
               <thead>
                 <tr>
                   <th scope="col">Date</th>
@@ -25,28 +23,37 @@
                   <th scope="col">Etat</th>
                   <th scope="col">N° Order</th>
                   <th scope="col">Medcin</th>
-                  <th scope="col" class="text-center">Action</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
             
               <tbody>
-           
-                <tr>
-                  <th scope="row">12/09/2020</th>
-                  <td>test</td>
-                  <td>test</td>
-                  <td>en-attente</td>
-                  <td>1</td>
-                  <td>benterka</td>
-                  <td class="d-flex justify-content-evenly">
-                    <form action="/salleAtt/" method="POST"><button class="btn btn-primary"  onclick="return confirm('Are you sure you want to delete this record?')" type="submit">En-cours</button></form>
-                    <form action="/salleAtt/" method="POST"><button class="btn btn-secondary"  onclick="return confirm('Are you sure you want to delete this record?')" type="submit">Examiner</button></form>
-                </td>
-              </tr>
+                <% if(room){ %>
+                  <% room.map((res)=>{ %>
+
+                    <tr>
+                      <th scope="row"><%= res.id_salleAtt.aujourdhui %></th>
+                      <td><%= res.id_patient.nom %></td>
+                      <td><%= res.id_patient.prenom %></td>
+                      <td><%= res.etat %></td>
+                      <td class="text-center"><%= res.num_order %></td>
+                      <td><%= res.id_medcine.nom %></td>
+                      <td >
+                        <form class="mb-1" action="/salleAtt/<%= res._id %>/en-cours" method="POST">
+                          <button class="btn btn-primary"  onclick="return confirm('L\'etat de ce patient sera changer à <<En-cours>>!')" type="submit">En-cours</button>
+                        </form>
+                        <form action="/salleAtt/<%= res._id %>/examiner" method="POST">
+                          <button class="btn btn-secondary"  onclick="return confirm('L\'etat de ce patient sera changer à <<Examiner>>!')" type="submit">Examiner</button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }) %>
+                <% } %>
               </tbody>
              <% } %>
             </table>
           </div>
+        </div>
           </div>        
 <% }else{ %>
     <script>

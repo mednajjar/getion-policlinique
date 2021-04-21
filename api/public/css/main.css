@@ -1,5 +1,12 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+}
 body{
     font-family: 'poppins', sans-serif;
+    background: url("../images/cool-background.png") repeat center; 
+    background-size: cover;
 }
 
 .register{

@@ -6,25 +6,33 @@ const jwt = require('jsonwebtoken');
 
 
 exports.login = async (req, res)=>{
+    const {email, password} = req.body;
 
     // check validaton
     const {error} = login(req.body);
-    if(error) return res.status(400).json({err: error.details[0].message});
-    const {email, password} = req.body;
+    if(error){
+        return res.render('index', {msg: error.details[0].message, email: email, pass: password});
+    } 
     try {
         // check email user
         const Email =  await User.findOne({email});
-        if(!Email)  return res.status(400).json({err: 'Invalid email or password'});
+        if(!Email){
+            req.flash('error', 'Invalid email or password');
+            return res.render('index', {msg: req.flash('error'), email: email, pass: password});
+        }  
         // compare password user
         const match = await bcrypt.compare(password, Email.password);
-        if(!match) return res.status(400).json({err: 'Invalid email or password'});
+        if(!match){
+            req.flash('error', 'Invalid email or password');
+            return res.render('index', {msg: req.flash('error'), email: email, pass: password});
+        }  
         req.session.id = Email._id;
         req.session.role = Email.role;
         const userRl = req.session.role;
-        console.log('from login',req.session.role)
         const token = jwt.sign({id: Email._id, role: Email.role}, process.env.TOKEN_SECRET, {expiresIn:process.env.EXPIRATION_IN});
+        console.log(token)
         res.cookie('auth_token', token, {maxAge:process.env.EXPIRATION_IN, httpOnly: true})
-        return res.status(200).render('dashboard', {role: userRl});
+        return res.status(200).render('dashboard', {role: userRl, msg: req.flash('error')});
 
     } catch (err) {
         res.status(400).json({error: 'bad request'});
