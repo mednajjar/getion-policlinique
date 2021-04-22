@@ -1,59 +1,65 @@
 <% if(role){ %>
-  <% if(role === 'reception'){ %>
-   
-        
-        <div class="container mt-5 text-center">
-            <h3>Liste de patient</h3>
-        </div>
-        <div class="container mt-5">
-          <div class="card shadow p-3 mb-5 bg-body rounded">
-          <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-              <form action="/patientList" method="GET">
-              <button class="btn btn-outline-success" type="submit">All patients</button>
-              </form>
-              <form class="d-flex" action="/patientList" method="POST">
-                <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
-            </div>
-          </nav>
-        <div class="container mt-5 overflow-auto">
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Cin</th>
-                <th scope="col">Date-Né</th>
-              </tr>
-            </thead>
-            <% if(patients !== null){ %>
-            <tbody>
-                <% patients.map(res=>{ %>
-              <tr>
-                <th scope="row"><%= res.nom %></th>
-                <td><%= res.prenom %></td>
-                <td><%= res.cin %></td>
-                <td><%= res.dateDeNaissance %></td>
-            </tr>
-            </tbody>
-            <% })}else{ %>
-              <p>no user found!</p>
-            <% }} %>
-          </table>
-        </div>
+<% if(role === 'reception'){ %>
+
+
+<div class="container mt-5 text-center">
+  <h3>Liste de patient</h3>
+</div>
+<div class="container mt-5">
+  <div class="card shadow p-3 mb-5 bg-body rounded">
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <form action="/patientList" method="GET">
+          <button class="btn btn-outline-success" type="submit">All patients</button>
+        </form>
+        <form class="d-flex" action="/patientList" method="POST">
+          <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
       </div>
-        </div>
-        
-            
-        
-    <% }else{ %>
-        <script>
-            location.replace("/")
-        </script>
-      <% } %>
-    
-    
-    
-     
+    </nav>
+    <div class="container mt-5 overflow-auto">
+      
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Cin</th>
+            <th scope="col">Date-Né</th>
+            <th class="col-2">Action</th>
+          </tr>
+        </thead>
+        <% if(patients !== null){ %>
+        <tbody>
+          <% patients.map(res=>{ %>
+          <tr>
+            <th scope="row"><%= res.nom %></th>
+            <td><%= res.prenom %></td>
+            <td><%= res.cin %></td>
+            <td><%= res.dateDeNaissance %></td>              
+              
+              <td>
+                
+                <a class="btn btn-danger" type="submit" href="/rajouter/<%= res._id %>">Rajouter</a>
+                
+              </td>
+              
+             
+          </tr>
+        </tbody>
+        <% })}else{ %>
+          <p>no user found!</p>
+          <% }} %>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<% }else{ %>
+<script>
+  location.replace("/")
+</script>
+<% } %>

@@ -1,0 +1,51 @@
+<% if(role){ %>
+<% if(role === 'reception'){ %>
+<% if(patients){ %>
+<h4 class="text-center mt-5">Rajouter ce patient à nouveau à la salle d'attente</h4>
+<div class="container mt-5">
+    <% if(msg !== ''){ %>
+        <p class="text-center text-danger"><%= msg %></p>
+      <% } %>
+    <div class="container">
+        <div class="card cart mx-auto shadow p-3 mb-5 bg-body rounded col-8">
+        <form class="register mx-auto pt-4 pb-4 col-10" action="/patientList/<%= patients._id %>" method="POST">
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom:</label>
+                <input type="text" class="form-control" value="<%= patients.nom %>" name="nom" aria-describedby="emailHelp"
+                    placeholder="Nom...">
+            </div>
+            <div class="mb-3">
+                <label for="prenom" class="form-label">Prénom:</label>
+                <input type="text" class="form-control" value="<%= patients.prenom %>" name="prenom"
+                    aria-describedby="emailHelp" placeholder="Prénom...">
+            </div>
+            <div class="mb-3">
+                <label for="cin" class="form-label">Cin:</label>
+                <input type="text" class="form-control" value="<%= patients.cin %>" name="cin" placeholder="Cin...">
+            </div>
+            <div class="mb-3">
+                <label for="dtns" class="form-label">Date de naissance:</label>
+                <input type="date" class="form-control" name="dtns">
+            </div>
+            <div class="mb-3">
+                <label for="dtns" class="form-label">Medcin:</label>
+                <select name="name" class="form-select" aria-label="Default select example">
+                    <option selected>choisi un medcin</option>
+                    <% medcin.map(res=>{ %>
+                    <option value="<%= res.nom %>"><%= res.nom %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary col-12">Add</button>
+        </form>
+    </div>
+    </div>
+</div>
+
+<% } %>
+<% } %>
+<% }else{ %>
+<script>
+    location.replace("/")
+</script>
+<% } %>

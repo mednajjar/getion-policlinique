@@ -19,7 +19,7 @@ const Consultation = require('../models/D_Consultation');
 }
 
  exports.patientListPage = async (req, res)=>{
-    await findAll(req, res, Patient)
+    await findAll(req, res, Patient, Consultation, Medcine)
 }
 
 
@@ -37,9 +37,10 @@ const Consultation = require('../models/D_Consultation');
     if(error){
         return res.render('patient', {role: req.session.role, medcin: medcine, msg: error.details[0].message});
     } 
-    // const today = new Date().toISOString().slice(0, 10)
-    // console.log(today)
-    const findDate = await Room.findOne({aujourdhui: Date.now })
+    const d = new Date();
+        const month = d.getMonth()+1;
+        const dt = d.getFullYear() + '-' + month + '-' + d.getDate();
+    const findDate = await Room.findOne({roomDate: dt })
     if(!findDate){
         req.flash('error', 'Veuillez créer une salle d\'attente pour aujourd\'hui avant d\'ajouter un patient!')
         return res.render('patient', {role: req.session.role, medcin: medcine, msg: req.flash('error')});
@@ -50,8 +51,6 @@ const Consultation = require('../models/D_Consultation');
             req.flash('error', 'La CIN existe déjà!')
             return res.render('patient', {role: req.session.role, medcin: medcine, msg: req.flash('error')});
         } 
-
-        
         const selectedMedcine = await Medcine.findOne({nom: req.body.name})
         if(selectedMedcine.patientmax > selectedMedcine.consmax){
             req.flash('error', `Le nombre de consultation pour monsieur ${req.body.name} attiendre le maximum!, veuillez le contacter.`)
@@ -76,8 +75,6 @@ const Consultation = require('../models/D_Consultation');
             req.flash('error', 'Patient créer et ajouter au salle d\'attente')
             return res.render('patient', {role: req.session.role, medcin: medcine, msg: req.flash('error')});
         } 
-        // const newPatient = await patient.save();
-        // if(newPatient) return res.status(200).render('patient', {role: req.session.role, medcin: medcine});
         
     } catch (error) {
         throw Error(error)
@@ -126,20 +123,26 @@ exports.newRoom = async (req, res)=>{
     const receptionRole = req.session.role;
     
     try {
+        const d = new Date();
+        const month = d.getMonth()+1;
+        const dt = d.getFullYear() + '-' + month + '-' + d.getDate();
+        
         const fetchRoom = await Room.find();
-        const ExistRoom = await Room.findOne({ajourdhui: fetchRoom.roomDate});
-        if(ExistRoom){
+        const existRoom = await Room.findOne({roomDate: dt});
+        
+        if(!existRoom){
+            const room = new Room();
+            const newRoom = await room.save();
+            if(newRoom)
+            await Medcine.updateMany({patientmax: 0});
+            req.flash('error', 'Vous avez créer nouveau salle d\'attente')
+            return res.render('room', {role: receptionRole, room: fetchRoom, msg: req.flash('error')})
+            
+        }else{
             req.flash('error', 'Salle d\'attente existe déjà pour aujourd\'hui!');
             return res.render('room', {role: receptionRole, room: fetchRoom, msg: req.flash('error')})
         }
         
-        const room = new Room();
-        const newRoom = await room.save();
-        if(newRoom){
-            await Medcine.updateMany({patientmax: 0});
-            req.flash('error', 'Vous avez créer nouveau salle d\'attente')
-            return res.render('room', {role: receptionRole, room: fetchRoom, msg: req.flash('error')})
-        }
         
     } catch (error) {
         throw Error(error)
@@ -157,7 +160,7 @@ exports.examiner = async (req, res) =>{
 exports.findRoom = async (req, res)=>{
     try {
         const receptionRole = req.session.role;
-        const resultat = await Consultation.find({$or: [{etat: { $regex: '.*' + req.body.keyword + '.*' }}, {num_order:  req.body.keyword }]})
+        const resultat = await Consultation.find({etat: { $regex: '.*' + req.body.keyword + '.*' }})
         .populate('id_salleAtt')
         .populate('id_medcine')
         .populate('id_patient')
@@ -166,3 +169,58 @@ exports.findRoom = async (req, res)=>{
         throw Error(error)
     }
 }
+
+exports.rajouterPatient = async (req, res) =>{
+
+    const medcine = await Medcine.find();
+    const patients = await Patient.find();
+    const consPat = await Consultation.find();
+
+    const d = new Date();
+        const month = d.getMonth()+1;
+        const dt = d.getFullYear() + '-' + month + '-' + d.getDate();
+    
+    const findDate = await Room.findOne({roomDate: dt })
+    console.log(findDate)
+    if(!findDate){
+        req.flash('error', 'Veuillez créer une salle d\'attente pour aujourd\'hui avant d\'ajouter un patient!')
+        return res.render('rajouter', {role: req.session.role, patients: patients, medcin: medcine, examiner: consPat, msg: req.flash('error')});
+    } 
+    try {
+        console.log(req.params.id)
+        console.log(req.body.name)
+        const selectedMedcine = await Medcine.findOne({nom: req.body.name})
+        if(selectedMedcine.patientmax > selectedMedcine.consmax){
+            req.flash('error', `Le nombre de consultation pour monsieur ${req.body.name} attiendre le maximum!, veuillez le contacter.`)
+            return res.render('rajouter', {role: req.session.role, patients: patients,medcin: medcine, examiner: consPat, msg: req.flash('error')});
+        } 
+        
+        
+        const dConsultation = new Consultation({
+            id_patient: req.params.id,
+            id_medcine: selectedMedcine._id,
+            id_salleAtt: findDate._id
+        })
+        dConsultation.save();
+        const task =  Fawn.Task();
+        // const taches = await task.save('Patient', patient)
+        task.update('Medcine',{_id: selectedMedcine._id},{$inc:{patientmax: 1}})
+        .update('D_Consultation',{_id: dConsultation._id},{$inc:{num_order: selectedMedcine.patientmax + 1}})
+        .run({ useMongoose: true })
+        if (task){
+            req.flash('error', 'Patient créer et ajouter au salle d\'attente')
+            return res.render('rajouter', {role: req.session.role, patients: patients, medcin: medcine,examiner: consPat, msg: req.flash('error')});
+        } 
+        
+    } catch (error) {
+        throw Error(error)
+    }
+}
+
+exports.rajouterPage = async (req, res)=>{
+    const medcine = await Medcine.find();
+    const patients = await Patient.findById(req.params.id);
+    return res.render('rajouter', {role: req.session.role, patients: patients, medcin: medcine, msg: ''});
+
+}
+

@@ -29,12 +29,14 @@ exports.findPatient = async (res, model, value) =>{
     }
 }
 
-exports.findAll = async (req, res, model)=>{
+exports.findAll = async (req, res, model, model2, model3)=>{
     const receptionRole = req.session.role;
     try {
     
-        const patients = await model.find();
-        if(patients) res.render('patientList', {role: receptionRole, patients: patients}) 
+        const patients = await model.find()
+        const consPat = await model2.find();
+        const medcine = await model3.find();  
+        if(patients) res.render('patientList', {role: receptionRole, patients: patients,medcin: medcine, examiner: consPat, msg: ''}) 
     } catch (error) {
         throw Error(error)
     }
@@ -48,6 +50,7 @@ exports.updatedEtat = async (req, res, model, value)=>{
         .populate('id_salleAtt')
         .populate('id_medcine')
         .populate('id_patient')
+        
         return res.render('salleAtt', {role: receptionRole, room: room})
     }
 }

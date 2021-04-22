@@ -2,7 +2,7 @@ const express = require('express');
 const route = express.Router();
 
 const {register, getReception, registerPage, dashboard, deleteUser, medcinePage, registerMedcine, getMedcine, deleteMedcine}= require('../controllers/adminController');
-const {createPatient, patientPage, findFunction, patientListPage, salleAttPage, roomPage, newRoom, enCours, examiner, findRoom} = require('../controllers/receptionController');
+const {createPatient, patientPage, findFunction, patientListPage, salleAttPage, roomPage, newRoom, enCours, examiner, findRoom, rajouterPatient, rajouterPage} = require('../controllers/receptionController');
 const {auth, authAdmin, authReception} = require('../middlewares/validateToken');
 const {login, logout} = require('../controllers/auth');
 
@@ -22,12 +22,15 @@ route.get('/patient', patientPage)
 route.post('/patient', createPatient)
 route.get('/patientList', patientListPage)
 route.post('/patientList',findFunction)
+route.post('/patientList/:id', rajouterPatient)
+route.get('/rajouter/:id', rajouterPage)
 route.get('/salleAtt', salleAttPage)
 route.get('/room', roomPage)
 route.post('/room', newRoom)
 route.post('/salleAtt/:id/en-cours', enCours)
 route.post('/salleAtt/:id/examiner', examiner)
 route.post('/salleAtt', findRoom)
+
 
 
 route.post('/dashboard', login)
