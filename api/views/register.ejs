@@ -1,0 +1,28 @@
+<% if(role){ %>
+  <% if(role === 'admin'){ %>
+<h1 class="text-center mt-5">Add reception</h1>
+<div class="container mt-5">    
+   <div class="card cart mx-auto shadow p-3 mb-5 bg-body rounded" >
+    <form class="register mx-auto pt-4 pb-4" action="/register" method="POST">
+        <div class="mb-3">
+          <label for="username" class="form-label">User name:</label>
+          <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="User name...">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Email...">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" placeholder="Password...">
+        </div>
+        <button type="submit" class="btn btn-primary col-12">Add</button>
+      </form>
+   </div> 
+</div>
+<% } %>
+<% }else{ %>
+  <script>
+    location.replace("/")
+  </script>
+<% } %>

@@ -1,0 +1,62 @@
+<% if(role){ %>
+    <% if(role === 'reception'){ %>
+          <div class="container mt-5 text-center">
+              <h3>Salle d'attente</h3>
+          </div>
+          <div class="container mt-5">
+            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
+            <nav class="navbar navbar-light bg-light">
+              <div class="container-fluid col-8">
+                <form class="d-flex col-12" action="/salleAtt" method="POST">
+                  <input class="form-control me-2" name="keyword" type="search" placeholder="Search by etat..." aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </div>
+            </nav>
+          <div class="container mt-5 overflow-auto shadow p-3 mb-5 bg-body rounded">
+          <table class="table ">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Prénom</th>
+                  <th scope="col">Etat</th>
+                  <th scope="col">N° Order</th>
+                  <th scope="col">Medcin</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+            
+              <tbody>
+                <% if(room){ %>
+                  <% room.map((res)=>{ %>
+
+                    <tr>
+                      <th scope="row"><%= res.id_salleAtt.aujourdhui %></th>
+                      <td><%= res.id_patient.nom %></td>
+                      <td><%= res.id_patient.prenom %></td>
+                      <td><%= res.etat %></td>
+                      <td class="text-center"><%= res.num_order %></td>
+                      <td><%= res.id_medcine.nom %></td>
+                      <td >
+                        <form class="mb-1" action="/salleAtt/<%= res._id %>/en-cours" method="POST">
+                          <button class="btn btn-primary"  onclick="return confirm('L\'etat de ce patient sera changer à <<En-cours>>!')" type="submit">En-cours</button>
+                        </form>
+                        <form action="/salleAtt/<%= res._id %>/examiner" method="POST">
+                          <button class="btn btn-secondary"  onclick="return confirm('L\'etat de ce patient sera changer à <<Examiner>>!')" type="submit">Examiner</button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }) %>
+                <% } %>
+              </tbody>
+             <% } %>
+            </table>
+          </div>
+        </div>
+          </div>        
+<% }else{ %>
+    <script>
+        location.replace("/")
+    </script>
+<% } %>

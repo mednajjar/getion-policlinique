@@ -1,0 +1,41 @@
+<% if(role){ %>
+    <% if(role === 'reception'){ %>
+     
+          
+          <div class="container mt-5 text-center">
+              <h3>Rooms</h3>
+          </div>
+          <div class="d-flex justify-content-center mt-5">
+          <div class="card text-center shadow p-3 mb-5 bg-body rounded" style="width: 24rem;">
+            <div class="card-body">
+                <% if(msg !== ''){ %>
+                    <p class="text-center text-danger"><%= msg %></p>
+                <% } %>
+              <h5 class="card-title">Dates</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <% if(room){ %>
+                    <% room.map(res=>{ %>
+              <li class="list-group-item"><%= res.aujourdhui %></li> 
+              <% })} %>
+               <% } %> 
+            </ul>
+            <div class="card-body d-flex justify-content-evenly">
+                <form action="/room" method="POST">
+                    <button class="btn btn-outline-success" type="submit">Create room</button>
+                </form>
+                <form action="/room" method="GET">
+                    <button class="btn btn-outline-success" type="submit">Get dates</button>
+                </form>
+            </div>
+          </div>  
+        </div>   
+      <% }else{ %>
+          <script>
+              location.replace("/")
+          </script>
+        <% } %>
+      
+      
+      
+       
